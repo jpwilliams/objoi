@@ -28,3 +28,7 @@ Yep! You can `objoi` with `Object`s, `Array`s and `Function`s along with all of 
 ## Why did you do this?
 
 I don't know yet. I mean, it's gotta be useful for _something_, right?
+
+## I want a slowly-typed, animated example
+
+[![asciicast](https://asciinema.org/a/631ewhm87r6346v3qmidfqxqt.png)](https://asciinema.org/a/631ewhm87r6346v3qmidfqxqt)

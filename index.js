@@ -1,8 +1,9 @@
 const J = require('joi')
-const _ = require('lodash')
 
 module.exports = function objoi (o, j) {
-    if (!o || !_.isObject(o)) {
+    const y = typeof o
+
+    if (!o || (y !== 'object' && y !== 'function')) {
         throw new Error('An Object is required to create a new Objoi')
     }
 
@@ -12,7 +13,7 @@ module.exports = function objoi (o, j) {
     if (s.error) throw s.error
 
     switch (true) {
-        case _.isArray(o):
+        case Array.isArray(o):
             return new Proxy(o, {
                 set (t, p, v) {
                     let n = t.slice(0)
@@ -24,7 +25,7 @@ module.exports = function objoi (o, j) {
                 }
             })
 
-        case _.isFunction(o):
+        case (y === 'function'):
             return new Proxy(o, {
                 set (t, p, v) {
                     let n = Object.assign(t.bind(), t)

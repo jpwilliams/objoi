@@ -1,6 +1,5 @@
 const J = require('joi')
 const _ = require('lodash')
-const util = require('util')
 
 module.exports = function objoi (o, j) {
     if (!o || !_.isObject(o)) {

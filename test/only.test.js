@@ -35,6 +35,38 @@ describe('objoi', function () {
         foo.bar = 'qux'
     })
 
+    it('should fail on invalid second assignment (object)', function () {
+        var foo = objoi({}, {
+            bar: Joi.string().max(3)
+        })
+
+        expect(function () {
+            foo.bar = 'baz'
+        }).to.not.throw()
+
+        expect(foo.bar).to.equal('baz')
+
+        expect(function () {
+            foo.bar = 'quux'
+        }).to.throw('must be less')
+    })
+
+    it('should fail on invalid second assignment (array)', function () {
+        var foo = objoi([], Joi.array().items(
+            Joi.string().max(3)
+        ))
+
+        expect(function () {
+            foo[0] = 'baz'
+        }).to.not.throw()
+
+        expect(foo[0]).to.equal('baz')
+
+        expect(function () {
+            foo[0] = 'quux'
+        }).to.throw('must be less')
+    })
+
     it('should disallow setting the baz property to a string', function () {
         var foo = objoi({}, {
             baz: Joi.boolean()

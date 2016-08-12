@@ -1,0 +1,36 @@
+{
+  "name": "objoi",
+  "version": "0.0.0",
+  "description": "Validate object input using JOI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha --reporter spec --require test/bootstrap.js test/*.test.js -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpwilliams/objoi.git"
+  },
+  "keywords": [
+    "object",
+    "proxy",
+    "es6",
+    "es2015",
+    "joi",
+    "validate",
+    "schema"
+  ],
+  "author": "Jack Williams",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpwilliams/objoi/issues"
+  },
+  "homepage": "https://github.com/jpwilliams/objoi#readme",
+  "dependencies": {
+    "joi": "^9.0.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.4",
+    "mocha": "^3.0.2"
+  }
+}

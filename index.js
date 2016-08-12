@@ -39,7 +39,8 @@ module.exports = function objoi (o, j) {
         default:
             return new Proxy(o, {
                 set (t, p, v) {
-                    const n = Object.assign({[p]:v},t)
+                    let n = Object.assign({},t)
+                    n[p] = v
                     const r = J.validate(n, j)
                     if (r.error) throw r.error
                     t[p] = v

@@ -1,4 +1,4 @@
-function objoi (obj, schema = objoi.joi.any()) {
+function objoi (obj, schema=objoi.joi.any()) {
     const type = typeof obj
 
     if (!obj || (type !== 'object' && type !== 'function')) {
@@ -9,16 +9,7 @@ function objoi (obj, schema = objoi.joi.any()) {
     if (test.error) throw test.error
 
     const validate = function validate (target, property, value) {
-        let copy
-
-        if (Array.isArray(obj)) {
-            copy = target.slice(0)
-        } else if (type === 'function') {
-            copy = Object.assign(target.bind(), target)
-        } else {
-            copy = Object.assign({}, target)
-        }
-
+        const copy = Array.isArray(obj) ? target.slice(0) : Object.assign(type === 'function' ? target.bind() : {}, target)
         copy[property] = value
         const ret = objoi.joi.validate(copy, schema)
         if (ret.error) throw ret.error

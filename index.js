@@ -1,52 +1,38 @@
-const J = require('joi')
+const joi = require('joi')
 
-module.exports = function objoi (o, j) {
-    const y = typeof o
+module.exports = function objoi (obj, schema) {
+    const type = typeof obj
 
-    if (!o || (y !== 'object' && y !== 'function')) {
+    if (!obj || (type !== 'object' && type !== 'function')) {
         throw new Error('An Object is required to create a new Objoi')
     }
 
-    j = j || J.any()
+    schema = schema || joi.any()
 
-    const s = J.validate(o, j)
-    if (s.error) throw s.error
+    const test = joi.validate(obj, schema)
+    if (test.error) throw test.error
 
-    switch (true) {
-        case Array.isArray(o):
-            return new Proxy(o, {
-                set (t, p, v) {
-                    let n = t.slice(0)
-                    n[parseInt(p)] = v
-                    const r = J.validate(n, j)
-                    if (r.error) throw r.error
-                    t[parseInt(p)] = v
-                    return true
-                }
-            })
+    const validate = function validate (target, property, value) {
+        let copy
 
-        case (y === 'function'):
-            return new Proxy(o, {
-                set (t, p, v) {
-                    let n = Object.assign(t.bind(), t)
-                    n[p] = v
-                    const r = J.validate(n, j)
-                    if (r.error) throw r.error
-                    t[p] = v
-                    return true
-                }
-            })
+        if (Array.isArray(obj)) {
+            copy = target.slice(0)
+        } else if (type === 'function') {
+            copy = Object.assign(target.bind(), target)
+        } else {
+            copy = Object.assign({}, target)
+        }
 
-        default:
-            return new Proxy(o, {
-                set (t, p, v) {
-                    let n = Object.assign({},t)
-                    n[p] = v
-                    const r = J.validate(n, j)
-                    if (r.error) throw r.error
-                    t[p] = v
-                    return true
-                }
-            })
+        copy[property] = value
+        const ret = joi.validate(copy, schema)
+        if (ret.error) throw ret.error
+        target[property] = value
+        return true
     }
+
+    return new Proxy(obj, {
+        set (target, property, value) {
+            return validate(target, property, value)
+        }
+    })
 }

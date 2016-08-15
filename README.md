@@ -7,12 +7,12 @@ Using ES2015's new [`Proxy`](https://developer.mozilla.org/en-US/docs/Web/JavaSc
 ``` js
 // Load dem modules
 var objoi = require('objoi')
-var joi = require('joi')
+var joi = objoi.joi
 
 // Make `foo` an object with a schema
-var foo = objoi({}, {
+var foo = objoi({}, joi.object().keys({
     bar: joi.boolean()
-})
+}))
 
 // Throws error: "bar" must be a boolean
 foo.bar = 'baz'
@@ -21,13 +21,13 @@ foo.bar = 'baz'
 foo.bar = true
 ```
 
-## Arrays? Functions?
-
-Yep! You can `objoi` with `Object`s, `Array`s and `Function`s along with all of the available validation rules that [joi](https://github.com/hapijs/joi) supports.
-
 ## Why did you do this?
 
 I don't know yet. I mean, it's gotta be useful for _something_, right?
+
+## Anything else?
+
+`objoi` also exposes `objoi.joi` which you can use to create schemas with in case you don't want to add two dependencies for a single module.
 
 ## I want a slowly-typed, animated example
 

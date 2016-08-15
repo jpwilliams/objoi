@@ -1,15 +1,13 @@
-const joi = require('joi')
-
-module.exports = function objoi (obj, schema) {
+function objoi (obj, schema) {
     const type = typeof obj
 
     if (!obj || (type !== 'object' && type !== 'function')) {
         throw new Error('An Object is required to create a new Objoi')
     }
 
-    schema = schema || joi.any()
+    schema = schema || objoi.joi.any()
 
-    const test = joi.validate(obj, schema)
+    const test = objoi.joi.validate(obj, schema)
     if (test.error) throw test.error
 
     const validate = function validate (target, property, value) {
@@ -24,7 +22,7 @@ module.exports = function objoi (obj, schema) {
         }
 
         copy[property] = value
-        const ret = joi.validate(copy, schema)
+        const ret = objoi.joi.validate(copy, schema)
         if (ret.error) throw ret.error
         target[property] = value
         return true
@@ -36,3 +34,7 @@ module.exports = function objoi (obj, schema) {
         }
     })
 }
+
+objoi.joi = require('joi')
+
+module.exports = objoi

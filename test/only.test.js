@@ -1,9 +1,13 @@
 var objoi = require('../index')
-var Joi = require('joi')
 
 describe('objoi', function () {
     it('should expose the objoi function', function () {
         expect(objoi).to.be.a('function')
+    })
+
+    it('should expose joi', function () {
+        expect(objoi.joi).to.be.an('object')
+        expect(objoi.joi.isJoi).to.equal(true)
     })
 
     it('should throw if no object provided', function () {
@@ -26,7 +30,7 @@ describe('objoi', function () {
 
     it('should not allow invalid objects on start', function () {
         expect(function () {
-            var foo = objoi({bar: 'baz'}, {bar: Joi.boolean()})
+            var foo = objoi({bar: 'baz'}, {bar: objoi.joi.boolean()})
         }).to.throw('"bar" must be a boolean')
     })
 
@@ -37,7 +41,7 @@ describe('objoi', function () {
 
     it('should fail on invalid second assignment (object)', function () {
         var foo = objoi({}, {
-            bar: Joi.string().max(3)
+            bar: objoi.joi.string().max(3)
         })
 
         expect(function () {
@@ -52,8 +56,8 @@ describe('objoi', function () {
     })
 
     it('should fail on invalid second assignment (array)', function () {
-        var foo = objoi([], Joi.array().items(
-            Joi.string().max(3)
+        var foo = objoi([], objoi.joi.array().items(
+            objoi.joi.string().max(3)
         ))
 
         expect(function () {
@@ -69,7 +73,7 @@ describe('objoi', function () {
 
     it('should disallow setting the baz property to a string', function () {
         var foo = objoi({}, {
-            baz: Joi.boolean()
+            baz: objoi.joi.boolean()
         })
 
         expect(function () {
@@ -78,7 +82,7 @@ describe('objoi', function () {
     })
 
     it('should not allow unknown properties', function () {
-        var foo = objoi({}, Joi.object().keys({}))
+        var foo = objoi({}, objoi.joi.object().keys({}))
 
         expect(function () {
             foo.bar = 'test'
@@ -92,7 +96,7 @@ describe('objoi', function () {
     })
 
     it('should check array limits', function () {
-        var foo = objoi(['foo'], Joi.array().max(2))
+        var foo = objoi(['foo'], objoi.joi.array().max(2))
 
         expect(function () {
             foo.push('bar')
@@ -106,7 +110,7 @@ describe('objoi', function () {
     })
 
     it('should check object limits', function () {
-        var foo = objoi({bar: 'baz'}, Joi.object().max(2))
+        var foo = objoi({bar: 'baz'}, objoi.joi.object().max(2))
 
         expect(function () {
             foo.baz = 'qux'
@@ -120,13 +124,13 @@ describe('objoi', function () {
     })
 
     it('should allow functions', function () {
-        var foo = objoi(function () {}, Joi.func())
+        var foo = objoi(function () {}, objoi.joi.func())
 
         expect(foo).to.be.a('function')
     })
 
     it('should check function keys', function () {
-        var foo = objoi(function () {}, Joi.func().max(1))
+        var foo = objoi(function () {}, objoi.joi.func().max(1))
 
         expect(function () {
             foo.baz = 'qux'

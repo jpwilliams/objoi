@@ -1,11 +1,9 @@
-function objoi (obj, schema) {
+function objoi (obj, schema = objoi.joi.any()) {
     const type = typeof obj
 
     if (!obj || (type !== 'object' && type !== 'function')) {
         throw new Error('An Object is required to create a new Objoi')
     }
-
-    schema = schema || objoi.joi.any()
 
     const test = objoi.joi.validate(obj, schema)
     if (test.error) throw test.error
